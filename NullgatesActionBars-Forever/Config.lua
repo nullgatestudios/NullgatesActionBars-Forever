@@ -1,17 +1,17 @@
 --[[
-    Bleakfiber's Action Bars - Config.lua
+    Nullgate's Action Bars - Config.lua
     Data Layer: Database Defaults, Get/Set Accessors, Slash Commands & Hub Registration
 ]]
 
 local addonName, BAB = ...
 
-local ADDON_NAME = "BleakfibersActionBars"
-local FULL_TITLE = "Bleakfiber's Action Bars"
+local ADDON_NAME = "NullgatesActionBars"
+local FULL_TITLE = "Nullgate's Action Bars"
 local DISPLAY_TITLE = "Action Bars"
 
 local Config = {}
 BAB.Config = Config
-_G["BleakfibersActionBarsConfig"] = Config
+_G["NullgatesActionBarsConfig"] = Config
 
 local _, playerClass = UnitClass("player")
 local petClasses = { HUNTER = true, WARLOCK = true, MAGE = true }
@@ -240,64 +240,64 @@ local function EnsureProfileDefaults(profileTable)
 end
 
 function Config:InitDB()
-    if type(BleakfibersActionBarsDB) ~= "table" then
-        BleakfibersActionBarsDB = {}
+    if type(NullgatesActionBarsDB) ~= "table" then
+        NullgatesActionBarsDB = {}
     end
 
     -- Multi-profile initialization & automatic migration of flat settings
-    if type(BleakfibersActionBarsDB.profiles) ~= "table" then
+    if type(NullgatesActionBarsDB.profiles) ~= "table" then
         local defaultProfile = {}
         for section, secDefaults in pairs(DB_DEFAULTS) do
-            if BleakfibersActionBarsDB[section] ~= nil then
-                defaultProfile[section] = DeepCopy(BleakfibersActionBarsDB[section])
+            if NullgatesActionBarsDB[section] ~= nil then
+                defaultProfile[section] = DeepCopy(NullgatesActionBarsDB[section])
             end
         end
-        if BleakfibersActionBarsDB.movers ~= nil then
-            defaultProfile.movers = DeepCopy(BleakfibersActionBarsDB.movers)
+        if NullgatesActionBarsDB.movers ~= nil then
+            defaultProfile.movers = DeepCopy(NullgatesActionBarsDB.movers)
         end
         EnsureProfileDefaults(defaultProfile)
 
-        BleakfibersActionBarsDB.profiles = {
+        NullgatesActionBarsDB.profiles = {
             ["Default"] = defaultProfile
         }
-        BleakfibersActionBarsDB.activeProfile = "Default"
+        NullgatesActionBarsDB.activeProfile = "Default"
     end
 
-    local active = BleakfibersActionBarsDB.activeProfile or "Default"
-    if not BleakfibersActionBarsDB.profiles[active] then
-        BleakfibersActionBarsDB.profiles[active] = DeepCopy(DB_DEFAULTS)
+    local active = NullgatesActionBarsDB.activeProfile or "Default"
+    if not NullgatesActionBarsDB.profiles[active] then
+        NullgatesActionBarsDB.profiles[active] = DeepCopy(DB_DEFAULTS)
     end
-    EnsureProfileDefaults(BleakfibersActionBarsDB.profiles[active])
+    EnsureProfileDefaults(NullgatesActionBarsDB.profiles[active])
 
-    -- Point active profile tables directly to root BleakfibersActionBarsDB for seamless backward compatibility
+    -- Point active profile tables directly to root NullgatesActionBarsDB for seamless backward compatibility
     for section in pairs(DB_DEFAULTS) do
-        BleakfibersActionBarsDB[section] = BleakfibersActionBarsDB.profiles[active][section]
+        NullgatesActionBarsDB[section] = NullgatesActionBarsDB.profiles[active][section]
     end
-    if not BleakfibersActionBarsDB.profiles[active].movers then
-        BleakfibersActionBarsDB.profiles[active].movers = {}
+    if not NullgatesActionBarsDB.profiles[active].movers then
+        NullgatesActionBarsDB.profiles[active].movers = {}
     end
-    BleakfibersActionBarsDB.movers = BleakfibersActionBarsDB.profiles[active].movers
+    NullgatesActionBarsDB.movers = NullgatesActionBarsDB.profiles[active].movers
 
     -- Wire reference to BAB.db for seamless access
-    BAB.db = BleakfibersActionBarsDB
+    BAB.db = NullgatesActionBarsDB
     if not BAB.db.profile then
         BAB.db.profile = {}
     end
-    BAB.db.profile.actionbars = BleakfibersActionBarsDB
-    BAB.db.profile.general = BleakfibersActionBarsDB.general
+    BAB.db.profile.actionbars = NullgatesActionBarsDB
+    BAB.db.profile.general = NullgatesActionBarsDB.general
 end
 
 --[[-----------------------------------------------------------------------------
     Profile Accessors & Management
 -------------------------------------------------------------------------------]]
 function Config:GetActiveProfile()
-    return (BleakfibersActionBarsDB and BleakfibersActionBarsDB.activeProfile) or "Default"
+    return (NullgatesActionBarsDB and NullgatesActionBarsDB.activeProfile) or "Default"
 end
 
 function Config:GetProfiles()
     local list = {}
-    if BleakfibersActionBarsDB and BleakfibersActionBarsDB.profiles then
-        for name in pairs(BleakfibersActionBarsDB.profiles) do
+    if NullgatesActionBarsDB and NullgatesActionBarsDB.profiles then
+        for name in pairs(NullgatesActionBarsDB.profiles) do
             table.insert(list, name)
         end
     end
@@ -310,26 +310,26 @@ function Config:SetActiveProfile(name)
     if not name or name == "" then return end
     self:InitDB()
 
-    if not BleakfibersActionBarsDB.profiles[name] then
+    if not NullgatesActionBarsDB.profiles[name] then
         local current = self:GetActiveProfile()
-        BleakfibersActionBarsDB.profiles[name] = DeepCopy(BleakfibersActionBarsDB.profiles[current] or DB_DEFAULTS)
+        NullgatesActionBarsDB.profiles[name] = DeepCopy(NullgatesActionBarsDB.profiles[current] or DB_DEFAULTS)
     end
-    EnsureProfileDefaults(BleakfibersActionBarsDB.profiles[name])
-    BleakfibersActionBarsDB.activeProfile = name
+    EnsureProfileDefaults(NullgatesActionBarsDB.profiles[name])
+    NullgatesActionBarsDB.activeProfile = name
 
     -- Re-link root section tables to the newly active profile
     for section in pairs(DB_DEFAULTS) do
-        BleakfibersActionBarsDB[section] = BleakfibersActionBarsDB.profiles[name][section]
+        NullgatesActionBarsDB[section] = NullgatesActionBarsDB.profiles[name][section]
     end
-    if not BleakfibersActionBarsDB.profiles[name].movers then
-        BleakfibersActionBarsDB.profiles[name].movers = {}
+    if not NullgatesActionBarsDB.profiles[name].movers then
+        NullgatesActionBarsDB.profiles[name].movers = {}
     end
-    BleakfibersActionBarsDB.movers = BleakfibersActionBarsDB.profiles[name].movers
+    NullgatesActionBarsDB.movers = NullgatesActionBarsDB.profiles[name].movers
 
-    BAB.db = BleakfibersActionBarsDB
+    BAB.db = NullgatesActionBarsDB
     if not BAB.db.profile then BAB.db.profile = {} end
-    BAB.db.profile.actionbars = BleakfibersActionBarsDB
-    BAB.db.profile.general = BleakfibersActionBarsDB.general
+    BAB.db.profile.actionbars = NullgatesActionBarsDB
+    BAB.db.profile.general = NullgatesActionBarsDB.general
 
     -- Live re-apply all bars and movers
     if BAB.Core and BAB.Core.UpdateAllBars then
@@ -347,8 +347,8 @@ function Config:SaveCurrentAs(name)
     if not name or name == "" then return end
     self:InitDB()
     local curActive = self:GetActiveProfile()
-    BleakfibersActionBarsDB.profiles[name] = DeepCopy(BleakfibersActionBarsDB.profiles[curActive] or BleakfibersActionBarsDB or DB_DEFAULTS)
-    EnsureProfileDefaults(BleakfibersActionBarsDB.profiles[name])
+    NullgatesActionBarsDB.profiles[name] = DeepCopy(NullgatesActionBarsDB.profiles[curActive] or NullgatesActionBarsDB or DB_DEFAULTS)
+    EnsureProfileDefaults(NullgatesActionBarsDB.profiles[name])
     self:SetActiveProfile(name)
 end
 
@@ -356,14 +356,14 @@ function Config:CreateProfile(name, fromName)
     if not name or name == "" then return end
     self:InitDB()
     -- Never overwrite existing profile!
-    if not BleakfibersActionBarsDB.profiles[name] then
-        local source = fromName and BleakfibersActionBarsDB.profiles[fromName]
+    if not NullgatesActionBarsDB.profiles[name] then
+        local source = fromName and NullgatesActionBarsDB.profiles[fromName]
         if not source then
             local curActive = self:GetActiveProfile()
-            source = BleakfibersActionBarsDB.profiles[curActive] or BleakfibersActionBarsDB or DB_DEFAULTS
+            source = NullgatesActionBarsDB.profiles[curActive] or NullgatesActionBarsDB or DB_DEFAULTS
         end
-        BleakfibersActionBarsDB.profiles[name] = DeepCopy(source)
-        EnsureProfileDefaults(BleakfibersActionBarsDB.profiles[name])
+        NullgatesActionBarsDB.profiles[name] = DeepCopy(source)
+        EnsureProfileDefaults(NullgatesActionBarsDB.profiles[name])
     end
     self:SetActiveProfile(name)
 end
@@ -371,17 +371,17 @@ end
 function Config:DeleteProfile(name)
     if not name or name == "Default" then return end
     self:InitDB()
-    BleakfibersActionBarsDB.profiles[name] = nil
-    if BleakfibersActionBarsDB.activeProfile == name then
+    NullgatesActionBarsDB.profiles[name] = nil
+    if NullgatesActionBarsDB.activeProfile == name then
         self:SetActiveProfile("Default")
     end
 end
 
 function Config:CopyProfile(fromName, toName)
     self:InitDB()
-    if BleakfibersActionBarsDB.profiles[fromName] then
-        BleakfibersActionBarsDB.profiles[toName] = DeepCopy(BleakfibersActionBarsDB.profiles[fromName])
-        if BleakfibersActionBarsDB.activeProfile == toName then
+    if NullgatesActionBarsDB.profiles[fromName] then
+        NullgatesActionBarsDB.profiles[toName] = DeepCopy(NullgatesActionBarsDB.profiles[fromName])
+        if NullgatesActionBarsDB.activeProfile == toName then
             self:SetActiveProfile(toName)
         end
     end
@@ -390,8 +390,8 @@ end
 function Config:ResetProfile(name)
     name = name or self:GetActiveProfile()
     self:InitDB()
-    BleakfibersActionBarsDB.profiles[name] = DeepCopy(DB_DEFAULTS)
-    if BleakfibersActionBarsDB.activeProfile == name then
+    NullgatesActionBarsDB.profiles[name] = DeepCopy(DB_DEFAULTS)
+    if NullgatesActionBarsDB.activeProfile == name then
         self:SetActiveProfile(name)
     end
 end
@@ -400,33 +400,33 @@ end
     Database Accessors with Instant Auto-Save
 -------------------------------------------------------------------------------]]
 function Config:Get(section, key, default)
-    if not BleakfibersActionBarsDB then return default end
+    if not NullgatesActionBarsDB then return default end
     if section and key then
-        local secTable = BleakfibersActionBarsDB[section]
+        local secTable = NullgatesActionBarsDB[section]
         if secTable and secTable[key] ~= nil then
             return secTable[key]
         end
     elseif section and not key then
-        if BleakfibersActionBarsDB[section] ~= nil then
-            return BleakfibersActionBarsDB[section]
+        if NullgatesActionBarsDB[section] ~= nil then
+            return NullgatesActionBarsDB[section]
         end
     end
     return default
 end
 
 function Config:Set(section, key, value)
-    if not BleakfibersActionBarsDB then
+    if not NullgatesActionBarsDB then
         self:InitDB()
     end
 
     local activeProf = self:GetActiveProfile()
-    local profTable = BleakfibersActionBarsDB.profiles and BleakfibersActionBarsDB.profiles[activeProf]
+    local profTable = NullgatesActionBarsDB.profiles and NullgatesActionBarsDB.profiles[activeProf]
 
     if section and key then
-        if type(BleakfibersActionBarsDB[section]) ~= "table" then
-            BleakfibersActionBarsDB[section] = {}
+        if type(NullgatesActionBarsDB[section]) ~= "table" then
+            NullgatesActionBarsDB[section] = {}
         end
-        BleakfibersActionBarsDB[section][key] = value
+        NullgatesActionBarsDB[section][key] = value
 
         if profTable then
             if type(profTable[section]) ~= "table" then
@@ -435,7 +435,7 @@ function Config:Set(section, key, value)
             profTable[section][key] = value
         end
     elseif section and not key then
-        BleakfibersActionBarsDB[section] = value
+        NullgatesActionBarsDB[section] = value
         if profTable then
             profTable[section] = value
         end
@@ -453,7 +453,7 @@ function Config:Set(section, key, value)
 end
 
 function Config:ResetDB()
-    BleakfibersActionBarsDB = DeepCopy(DB_DEFAULTS)
+    NullgatesActionBarsDB = DeepCopy(DB_DEFAULTS)
     self:InitDB()
 
     if BAB.Core and BAB.Core.UpdateAllBars then
@@ -470,8 +470,8 @@ function Config:ResetDB()
 end
 
 function Config:CopyBarSettings(sourceKey, targetKey)
-    local src = BleakfibersActionBarsDB[sourceKey]
-    local dest = BleakfibersActionBarsDB[targetKey]
+    local src = NullgatesActionBarsDB[sourceKey]
+    local dest = NullgatesActionBarsDB[targetKey]
     if not src or not dest then return end
 
     for k, v in pairs(src) do
@@ -498,11 +498,11 @@ end
     Open / Toggle Configuration Window
 -------------------------------------------------------------------------------]]
 function Config:Open(forceStandalone)
-    if not forceStandalone and BleakfibersAddonConfigForever and BleakfibersAddonConfigForever.SelectModule then
-        BleakfibersAddonConfigForever:ShowUI()
-        BleakfibersAddonConfigForever:SelectModule(ADDON_NAME)
+    if not forceStandalone and NullgatesAddonConfigForever and NullgatesAddonConfigForever.SelectModule then
+        NullgatesAddonConfigForever:ShowUI()
+        NullgatesAddonConfigForever:SelectModule(ADDON_NAME)
     else
-        local ui = BAB.UI or _G["BleakfibersActionBarsUI"]
+        local ui = BAB.UI or _G["NullgatesActionBarsUI"]
         if ui and ui.ToggleStandaloneWindow then
             ui:ToggleStandaloneWindow()
         end
@@ -512,21 +512,20 @@ end
 --[[-----------------------------------------------------------------------------
     Slash Command Routing
 -------------------------------------------------------------------------------]]
-SLASH_BLEAKFIBERSACTIONBARS1 = "/bab"
-SLASH_BLEAKFIBERSACTIONBARS2 = "/bfab"
-SLASH_BLEAKFIBERSACTIONBARS3 = "/actionbars"
+SLASH_NULLGATESACTIONBARS1 = "/nab"
+SLASH_NULLGATESACTIONBARS2 = "/actionbars"
 
-SlashCmdList["BLEAKFIBERSACTIONBARS"] = function(msg)
+SlashCmdList["NULLGATESACTIONBARS"] = function(msg)
     msg = msg and string.trim and string.trim(msg:lower()) or (msg and msg:lower() or "")
     if msg == "move" or msg == "unlock" or msg == "movers" then
-        local BAC = _G["BleakfibersAddonConfigForever"] or _G["BleakfibersAddonConfig"]
+        local BAC = _G["NullgatesAddonConfigForever"] or _G["NullgatesAddonConfig"]
         if BAC and BAC.ToggleAllMovers then
             BAC:ToggleAllMovers(true)
         elseif BAB.Core and BAB.Core.ToggleMovers then
             BAB.Core:ToggleMovers(true)
         end
     elseif msg == "lock" then
-        local BAC = _G["BleakfibersAddonConfigForever"] or _G["BleakfibersAddonConfig"]
+        local BAC = _G["NullgatesAddonConfigForever"] or _G["NullgatesAddonConfig"]
         if BAC and BAC.ToggleAllMovers then
             BAC:ToggleAllMovers(false)
         elseif BAB.Core and BAB.Core.ToggleMovers then
@@ -552,21 +551,21 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
 
 local function ToggleMoversHook(state)
-    local core = BAB.Core or _G["BleakfibersActionBarsCore"]
+    local core = BAB.Core or _G["NullgatesActionBarsCore"]
     if core and core.ToggleMovers then
         core:ToggleMovers(state)
     end
 end
 
 local function ResetMoversHook()
-    local core = BAB.Core or _G["BleakfibersActionBarsCore"]
+    local core = BAB.Core or _G["NullgatesActionBarsCore"]
     if core and core.ResetMovers then
         core:ResetMovers()
     end
 end
 
 local function IsMoversUnlockedHook()
-    local core = BAB.Core or _G["BleakfibersActionBarsCore"]
+    local core = BAB.Core or _G["NullgatesActionBarsCore"]
     if core and core.IsMoversUnlocked then
         return core:IsMoversUnlocked()
     end
@@ -574,8 +573,8 @@ local function IsMoversUnlockedHook()
 end
 
 -- Global cross-addon movers registry for master HUD / config integration
-_G.Bleakfibers_MoversRegistry = _G.Bleakfibers_MoversRegistry or {}
-_G.Bleakfibers_MoversRegistry["ActionBars"] = {
+_G.Nullgates_MoversRegistry = _G.Nullgates_MoversRegistry or {}
+_G.Nullgates_MoversRegistry["ActionBars"] = {
     name = FULL_TITLE,
     sidebarName = DISPLAY_TITLE,
     Toggle = ToggleMoversHook,
@@ -588,15 +587,15 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         Config:InitDB()
     end
 
-    if arg1 == "BleakfibersAddonConfig-Forever" or arg1 == addonName then
-        if BleakfibersAddonConfigForever and BleakfibersAddonConfigForever.RegisterModule then
-            BleakfibersAddonConfigForever:RegisterModule(ADDON_NAME, {
+    if arg1 == "NullgatesAddonConfig-Forever" or arg1 == addonName then
+        if NullgatesAddonConfigForever and NullgatesAddonConfigForever.RegisterModule then
+            NullgatesAddonConfigForever:RegisterModule(ADDON_NAME, {
                 name = FULL_TITLE,
                 sidebarName = DISPLAY_TITLE,
-                author = "Bleakfiber",
-                isBleakfiber = true,
+                author = "Nullgate Studios",
+                isNullgate = true,
                 description = "Modular, minimalist action bar suite for WoW Forever.",
-                db = BleakfibersActionBarsDB,
+                db = NullgatesActionBarsDB,
                 profiles = {
                     GetCurrent = function() return Config:GetActiveProfile() end,
                     SetCurrent = function(p) Config:SetActiveProfile(p) end,
@@ -611,7 +610,7 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
                 resetMovers = ResetMoversHook,
                 isMoversUnlocked = IsMoversUnlockedHook,
                 refresh = function()
-                    local core = BAB.Core or _G["BleakfibersActionBarsCore"]
+                    local core = BAB.Core or _G["NullgatesActionBarsCore"]
                     if core and core.ApplyAllMoverPositions then
                         core:ApplyAllMoverPositions()
                     end
@@ -621,11 +620,11 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
                     if core and core.UpdateAllBars then
                         core:UpdateAllBars()
                     end
-                    local ui = BAB.UI or _G["BleakfibersActionBarsUI"]
+                    local ui = BAB.UI or _G["NullgatesActionBarsUI"]
                     if ui and ui.Refresh then ui:Refresh() end
                 end,
                 buildUI = function(container, isMasterHub)
-                    local ui = BAB.UI or _G["BleakfibersActionBarsUI"]
+                    local ui = BAB.UI or _G["NullgatesActionBarsUI"]
                     if ui and ui.BuildOptions then
                         ui:BuildOptions(container, isMasterHub)
                     end

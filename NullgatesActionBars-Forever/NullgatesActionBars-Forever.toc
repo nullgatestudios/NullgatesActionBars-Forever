@@ -1,9 +1,9 @@
 ## Interface: 16001
-## Title: |cff3399ffBleakfiber's|r |cffffffffActionBars|r - |cffffd100Forever|r
+## Title: |cff3399ffNullgate's|r |cffffffffActionBars|r - |cffffd100Forever|r
 ## Notes: Modular, minimalist standalone action bar suite for World of Warcraft Forever.
-## Author: Bleakfiber
-## Version: 1.1.9
-## SavedVariables: BleakfibersActionBarsDB
+## Author: Nullgate Studios
+## Version: 1.2.0
+## SavedVariables: NullgatesActionBarsDB
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0
 ## X-License: Restricted - Source Available (All Rights Reserved, No Derivatives)
 

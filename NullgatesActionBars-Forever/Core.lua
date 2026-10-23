@@ -1,16 +1,16 @@
 --[[
-    Bleakfiber's Action Bars - Core.lua
+    Nullgate's Action Bars - Core.lua
     Gameplay Logic: Bar Containers, Button Skinning, Layouts, Movers,
     Blizzard Art Suppression, Combat Lockdown Safety & Event Dispatching
 ]]
 
 local addonName, BAB = ...
-_G["BleakfibersActionBars"] = BAB
+_G["NullgatesActionBars"] = BAB
 
-local Core = CreateFrame("Frame", "BleakfibersActionBarsCore", UIParent)
+local Core = CreateFrame("Frame", "NullgatesActionBarsCore", UIParent)
 BAB.Core = Core
 
-local Config = BAB.Config or _G["BleakfibersActionBarsConfig"]
+local Config = BAB.Config or _G["NullgatesActionBarsConfig"]
 
 local floor, max, min, select, pairs, ipairs = math.floor, math.max, math.min, select, pairs, ipairs
 local GetOrCreatePlayerButton
@@ -223,7 +223,7 @@ end
 local function EnsureMoverControlFrame()
     if controlFrame then return controlFrame end
 
-    controlFrame = CreateFrame("Frame", "BleakfibersActionBars_MoverControlFrame", UIParent)
+    controlFrame = CreateFrame("Frame", "NullgatesActionBars_MoverControlFrame", UIParent)
     controlFrame:SetSize(280, 50)
     controlFrame:SetPoint("TOP", UIParent, "TOP", 0, -24)
     controlFrame:SetFrameStrata("DIALOG")
@@ -234,7 +234,7 @@ local function EnsureMoverControlFrame()
     controlFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
     controlFrame:SetClampedToScreen(true)
     controlFrame:SetScript("OnShow", function(self)
-        local isBAC = (_G["BleakfibersAddonConfigForever"] ~= nil or _G["BleakfibersAddonConfig"] ~= nil)
+        local isBAC = (_G["NullgatesAddonConfigForever"] ~= nil or _G["NullgatesAddonConfig"] ~= nil)
         if isBAC then
             self:Hide()
         end
@@ -280,7 +280,7 @@ local function CreateMoverOverlay(moverData)
     local target = moverData.frame
     local key = moverData.key
 
-    local overlay = CreateFrame("Frame", "BleakfibersActionBars_Mover_" .. key, UIParent)
+    local overlay = CreateFrame("Frame", "NullgatesActionBars_Mover_" .. key, UIParent)
     overlay:SetFrameStrata("DIALOG")
     overlay:SetClampedToScreen(true)
     overlay:SetMovable(true)
@@ -331,12 +331,12 @@ function Core:RegisterMover(frame, displayName, key, defaultPoint, defaultX, def
 end
 
 function Core:SaveMoverPosition(key, point, x, y, relPoint)
-    if not BleakfibersActionBarsDB then return end
-    if not BleakfibersActionBarsDB.movers then
-        BleakfibersActionBarsDB.movers = {}
+    if not NullgatesActionBarsDB then return end
+    if not NullgatesActionBarsDB.movers then
+        NullgatesActionBarsDB.movers = {}
     end
     relPoint = relPoint or point
-    BleakfibersActionBarsDB.movers[key] = {
+    NullgatesActionBarsDB.movers[key] = {
         point = point,
         relPoint = relPoint,
         x = floor(x + 0.5),
@@ -344,11 +344,11 @@ function Core:SaveMoverPosition(key, point, x, y, relPoint)
     }
 
     local activeProf = Config and Config.GetActiveProfile and Config:GetActiveProfile()
-    if BleakfibersActionBarsDB.profiles and activeProf and BleakfibersActionBarsDB.profiles[activeProf] then
-        if not BleakfibersActionBarsDB.profiles[activeProf].movers then
-            BleakfibersActionBarsDB.profiles[activeProf].movers = {}
+    if NullgatesActionBarsDB.profiles and activeProf and NullgatesActionBarsDB.profiles[activeProf] then
+        if not NullgatesActionBarsDB.profiles[activeProf].movers then
+            NullgatesActionBarsDB.profiles[activeProf].movers = {}
         end
-        BleakfibersActionBarsDB.profiles[activeProf].movers[key] = BleakfibersActionBarsDB.movers[key]
+        NullgatesActionBarsDB.profiles[activeProf].movers[key] = NullgatesActionBarsDB.movers[key]
     end
 end
 
@@ -358,7 +358,7 @@ function Core:ApplyMoverPosition(key, frame)
     frame = frame or mover.frame
     if not frame then return end
 
-    local saved = BleakfibersActionBarsDB and BleakfibersActionBarsDB.movers and BleakfibersActionBarsDB.movers[key]
+    local saved = NullgatesActionBarsDB and NullgatesActionBarsDB.movers and NullgatesActionBarsDB.movers[key]
     frame:ClearAllPoints()
     if saved and saved.point then
         frame:SetPoint(saved.point, UIParent, saved.relPoint or saved.point, saved.x, saved.y)
@@ -376,11 +376,11 @@ function Core:ApplyAllMoverPositions()
 end
 
 function Core:ResetMovers()
-    if BleakfibersActionBarsDB then
-        BleakfibersActionBarsDB.movers = {}
+    if NullgatesActionBarsDB then
+        NullgatesActionBarsDB.movers = {}
         local activeProf = Config and Config.GetActiveProfile and Config:GetActiveProfile()
-        if BleakfibersActionBarsDB.profiles and activeProf and BleakfibersActionBarsDB.profiles[activeProf] then
-            BleakfibersActionBarsDB.profiles[activeProf].movers = {}
+        if NullgatesActionBarsDB.profiles and activeProf and NullgatesActionBarsDB.profiles[activeProf] then
+            NullgatesActionBarsDB.profiles[activeProf].movers = {}
         end
     end
     for key, mover in pairs(registeredMovers) do
@@ -393,11 +393,11 @@ function Core:ResetMovers()
             mover.overlay:SetPoint(mover.defaultPoint, UIParent, mover.defaultRelPoint or mover.defaultPoint, mover.defaultX, mover.defaultY)
         end
     end
-    DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r All action bar positions reset to defaults.")
+    DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r All action bar positions reset to defaults.")
 end
 
 local function IsMoverBarEnabled(key)
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     if not db then return true end
     if key:find("^ActionBar(%d+)$") then
         local idx = key:match("^ActionBar(%d+)$")
@@ -423,7 +423,7 @@ end
 
 function Core:ToggleMovers(forcedState)
     if InCombatLockdown() then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Cannot configure bar positions while in combat.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Cannot configure bar positions while in combat.")
         return
     end
 
@@ -433,14 +433,14 @@ function Core:ToggleMovers(forcedState)
         moversUnlocked = not moversUnlocked
     end
 
-    local isBAC = (_G["BleakfibersAddonConfigForever"] ~= nil or _G["BleakfibersAddonConfig"] ~= nil)
+    local isBAC = (_G["NullgatesAddonConfigForever"] ~= nil or _G["NullgatesAddonConfig"] ~= nil)
     local ctrl = EnsureMoverControlFrame()
     if moversUnlocked then
         if not isBAC then
             ctrl:Show()
         else
             ctrl:Hide()
-            local BAC = _G["BleakfibersAddonConfigForever"] or _G["BleakfibersAddonConfig"]
+            local BAC = _G["NullgatesAddonConfigForever"] or _G["NullgatesAddonConfig"]
             if BAC and BAC.ShowMoverControlFrame then
                 BAC:ShowMoverControlFrame()
             end
@@ -459,7 +459,7 @@ function Core:ToggleMovers(forcedState)
     else
         ctrl:Hide()
         if isBAC then
-            local BAC = _G["BleakfibersAddonConfigForever"] or _G["BleakfibersAddonConfig"]
+            local BAC = _G["NullgatesAddonConfigForever"] or _G["NullgatesAddonConfig"]
             if BAC and BAC.HideMoverControlFrame and (not BAC.AreMoversUnlocked or not BAC:AreMoversUnlocked()) then
                 BAC:HideMoverControlFrame()
             end
@@ -480,7 +480,7 @@ function Core:IsMoversUnlocked()
 end
 
 --[[-----------------------------------------------------------------------------
-    4b. Interactive Quick Keybinding Mode (/bab bind)
+    4b. Interactive Quick Keybinding Mode (/nab bind)
 -------------------------------------------------------------------------------]]
 local inQuickKeybind = false
 local keybindDialog = nil
@@ -526,7 +526,7 @@ local function GetButtonCommandName(btn)
 
     if name == "ExtraActionButton1" then return "EXTRAACTIONBUTTON1" end
 
-    local barNum, btnNum = name:match("^BleakfibersActionBars_Bar(%d+)Button(%d+)$")
+    local barNum, btnNum = name:match("^NullgatesActionBars_Bar(%d+)Button(%d+)$")
     if barNum and btnNum then
         barNum = tonumber(barNum)
         btnNum = tonumber(btnNum)
@@ -569,7 +569,7 @@ local function EnsureKeybindUI()
     if keybindDialog then return keybindDialog end
 
     -- Main Dialog Window
-    local dlg = CreateFrame("Frame", "BleakfibersActionBars_KeybindDialog", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
+    local dlg = CreateFrame("Frame", "NullgatesActionBars_KeybindDialog", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
     dlg:SetSize(460, 160)
     dlg:SetPoint("TOP", UIParent, "TOP", 0, -60)
     dlg:SetFrameStrata("DIALOG")
@@ -593,7 +593,7 @@ local function EnsureKeybindUI()
     local title = drag:CreateFontString(nil, "OVERLAY")
     BAB:SetFont(title, C.FONT_HEADER, 14, "OUTLINE")
     title:SetPoint("LEFT", drag, "LEFT", 8, 0)
-    title:SetText("|cFFFFD100Bleakfiber's Action Bars|r — Quick Keybind Mode")
+    title:SetText("|cFFFFD100Nullgate's Action Bars|r — Quick Keybind Mode")
 
     -- Close Button
     local close = CreateFrame("Button", nil, dlg, "UIPanelCloseButton")
@@ -631,11 +631,11 @@ local function EnsureKeybindUI()
         if isChar then
             LoadBindings(2)
             SaveBindings(2)
-            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Switched to Character-Specific keybindings.")
+            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Switched to Character-Specific keybindings.")
         else
             LoadBindings(1)
             SaveBindings(1)
-            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Switched to Account-Wide keybindings.")
+            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Switched to Account-Wide keybindings.")
         end
         Core:SkinAllButtons()
     end)
@@ -652,7 +652,7 @@ local function EnsureKeybindUI()
     saveLbl:SetText("|cFFFFD100Save|r")
     saveBtn:SetScript("OnClick", function()
         SaveBindings(GetCurrentBindingSet())
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r All keybindings successfully saved.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r All keybindings successfully saved.")
         Core:ToggleKeybindMode(false)
     end)
 
@@ -667,7 +667,7 @@ local function EnsureKeybindUI()
     discLbl:SetText("Discard")
     discardBtn:SetScript("OnClick", function()
         LoadBindings(GetCurrentBindingSet())
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Keybinding changes discarded.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Keybinding changes discarded.")
         Core:ToggleKeybindMode(false)
     end)
 
@@ -687,7 +687,7 @@ local function EnsureKeybindUI()
     keybindHighlight = hl
 
     -- Global Keyboard & Mouse Listener Frame
-    local listener = CreateFrame("Frame", "BleakfibersActionBars_KeybindListener", UIParent)
+    local listener = CreateFrame("Frame", "NullgatesActionBars_KeybindListener", UIParent)
     listener:SetFrameStrata("DIALOG")
     listener:EnableKeyboard(true)
     listener:EnableMouseWheel(true)
@@ -702,10 +702,10 @@ local function EnsureKeybindUI()
             local k1, k2 = GetBindingKey(cmd)
             if k1 then SetBinding(k1, nil) end
             if k2 then SetBinding(k2, nil) end
-            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Cleared bindings for |cffffd100" .. cmd .. "|r")
+            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Cleared bindings for |cffffd100" .. cmd .. "|r")
         else
             SetBinding(keyStr, cmd)
-            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Bound |cffffff00" .. keyStr .. "|r to |cff00ffff" .. cmd .. "|r")
+            DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Bound |cffffff00" .. keyStr .. "|r to |cff00ffff" .. cmd .. "|r")
         end
 
         Core:UpdateButtonVisuals(hoveredKeybindButton)
@@ -809,7 +809,7 @@ end
 
 function Core:ToggleKeybindMode(state)
     if InCombatLockdown() then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Cannot change keybindings during combat.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Cannot change keybindings during combat.")
         return
     end
 
@@ -841,7 +841,7 @@ function Core:ToggleKeybindMode(state)
             ExtraActionBar_ForceShowIfNeeded()
         end
 
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Quick Keybind Mode |cff00ff00ENABLED|r. Hover buttons and press keys to bind. Press ESC to clear.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Quick Keybind Mode |cff00ff00ENABLED|r. Hover buttons and press keys to bind. Press ESC to clear.")
     else
         dlg:Hide()
         if keybindListener then keybindListener:Hide() end
@@ -854,7 +854,7 @@ function Core:ToggleKeybindMode(state)
         self:UpdateAllBars()
         self:SkinAllButtons()
 
-        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Quick Keybind Mode |cffff5555DISABLED|r.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Quick Keybind Mode |cffff5555DISABLED|r.")
     end
 end
 
@@ -1110,7 +1110,7 @@ GetOrCreatePlayerButton = function(barIndex, buttonIndex, parent)
     end
 
     if not btn then
-        local name = "BleakfibersActionBars_Bar" .. barIndex .. "Button" .. buttonIndex
+        local name = "NullgatesActionBars_Bar" .. barIndex .. "Button" .. buttonIndex
         btn = _G[name]
         if not btn and not InCombatLockdown() then
             btn = CreateFrame("CheckButton", name, parent or UIParent, "ActionBarButtonTemplate")
@@ -1135,7 +1135,7 @@ end
 
 function Core:ShowCustomProcGlow(btn)
     if not btn then return end
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     if gen.procGlow == false then
         if btn._babProcGlow then btn._babProcGlow:Hide() end
         return
@@ -1198,7 +1198,7 @@ end
 
 function Core:AdjustOverlayGlow(btn)
     if not btn then return end
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     local alert = btn.SpellActivationAlert or btn.overlay
 
     if gen.procGlow == false then
@@ -1278,7 +1278,7 @@ Core.cooldownFrames = Core.cooldownFrames or {}
 
 function Core:TriggerCooldownPulse(btn)
     if not btn or not btn:IsShown() then return end
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     if gen.cooldownPulse == false then return end
 
     local iconTex
@@ -1337,7 +1337,7 @@ end
 
 function Core:UpdateCooldownFont(cd)
     if not cd then return end
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     local fontName = gen.cooldownFont or "Nata Sans Bold"
     local fontFile = BAB:FetchFont(fontName)
     if cd.SetCountdownFont then
@@ -1346,7 +1346,7 @@ function Core:UpdateCooldownFont(cd)
 end
 
 function Core:UpdateAllCooldownFonts()
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     local showNumbers = gen.cooldownText ~= false
     if SetCVar then
         pcall(SetCVar, "countdownForCooldowns", showNumbers and "1" or "0")
@@ -1376,7 +1376,7 @@ function Core:HookButtonCooldown(btn)
 
     table.insert(self.cooldownFrames, cd)
 
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     local showNumbers = gen.cooldownText ~= false
     if cd.SetHideCountdownNumbers then
         cd:SetHideCountdownNumbers(not showNumbers)
@@ -1521,7 +1521,7 @@ function Core:SkinButton(btn)
             hk._buiHooked = true
             hooksecurefunc(hk, "SetText", function(self, text)
                 if self._buiFormatting then return end
-                local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+                local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
                 if not text or text == "" or text == RANGE_INDICATOR or text == "\226\128\162" or text == "·" or text == "." or text == "*" or text:find("\226\128\162", 1, true) then
                     self._buiFormatting = true
                     self:SetText("")
@@ -1582,7 +1582,7 @@ function Core:SkinButton(btn)
                     local cmd = GetButtonCommandName(self)
                     if cmd then
                         SetBinding(prefix .. mb, cmd)
-                        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Bleakfiber's Action Bars]|r Bound |cffffff00" .. prefix .. mb .. "|r to |cff00ffff" .. cmd .. "|r")
+                        DEFAULT_CHAT_FRAME:AddMessage("|cff3399ff[Nullgate's Action Bars]|r Bound |cffffff00" .. prefix .. mb .. "|r to |cff00ffff" .. cmd .. "|r")
                         Core:UpdateButtonVisuals(self)
                         Core:SetKeybindTarget(self)
                     end
@@ -1597,7 +1597,7 @@ end
 
 function Core:UpdateButtonVisuals(btn, barConfig)
     if not btn then return end
-    local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general or {}
+    local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general or {}
     barConfig = barConfig or {}
 
     local btnName = btn.GetName and btn:GetName()
@@ -1766,7 +1766,7 @@ function Core:CreateBarContainers()
     for i = 1, 15 do
         local key = "bar" .. i
         if not bars[key] then
-            local b = CreateFrame("Frame", "BleakfibersActionBars_Bar" .. i, UIParent, "SecureHandlerStateTemplate")
+            local b = CreateFrame("Frame", "NullgatesActionBars_Bar" .. i, UIParent, "SecureHandlerStateTemplate")
             local point, x, y = GetBarDefaultPosition(i)
             b:SetPoint(point, UIParent, point, x, y)
             BAB:CreateBackdrop(b, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
@@ -1785,7 +1785,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.petBar then
-        local pb = CreateFrame("Frame", "BleakfibersActionBars_PetBar", UIParent, "SecureHandlerStateTemplate")
+        local pb = CreateFrame("Frame", "NullgatesActionBars_PetBar", UIParent, "SecureHandlerStateTemplate")
         pb:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 148)
         BAB:CreateBackdrop(pb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
         self:RegisterMover(pb, "Pet Action Bar", "PetBar", "BOTTOM", 0, 148)
@@ -1794,7 +1794,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.stanceBar then
-        local sb = CreateFrame("Frame", "BleakfibersActionBars_StanceBar", UIParent, "SecureHandlerStateTemplate")
+        local sb = CreateFrame("Frame", "NullgatesActionBars_StanceBar", UIParent, "SecureHandlerStateTemplate")
         sb:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 280, 28)
         BAB:CreateBackdrop(sb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
         self:RegisterMover(sb, "Stance / Shapeshift Bar", "StanceBar", "BOTTOMLEFT", 280, 28)
@@ -1803,7 +1803,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.microBar then
-        local mb = CreateFrame("Frame", "BleakfibersActionBars_MicroBar", UIParent, "SecureHandlerStateTemplate")
+        local mb = CreateFrame("Frame", "NullgatesActionBars_MicroBar", UIParent, "SecureHandlerStateTemplate")
         mb:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -4, 4)
         BAB:CreateBackdrop(mb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
         self:RegisterMover(mb, "Micro Menu Bar", "MicroBar", "BOTTOMRIGHT", -4, 4)
@@ -1812,7 +1812,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.extraBar then
-        local eb = CreateFrame("Frame", "BleakfibersActionBars_ExtraBar", UIParent, "SecureHandlerStateTemplate")
+        local eb = CreateFrame("Frame", "NullgatesActionBars_ExtraBar", UIParent, "SecureHandlerStateTemplate")
         eb:SetSize(52, 52)
         eb:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 190)
         BAB:CreateBackdrop(eb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
@@ -1823,7 +1823,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.vehicleLeave then
-        local vb = CreateFrame("Frame", "BleakfibersActionBars_VehicleLeaveBar", UIParent, "SecureHandlerStateTemplate")
+        local vb = CreateFrame("Frame", "NullgatesActionBars_VehicleLeaveBar", UIParent, "SecureHandlerStateTemplate")
         vb:SetSize(40, 40)
         vb:SetPoint("BOTTOM", UIParent, "BOTTOM", 140, 28)
         BAB:CreateBackdrop(vb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
@@ -1834,7 +1834,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.bagsBar then
-        local bb = CreateFrame("Frame", "BleakfibersActionBars_BagsBar", UIParent, "SecureHandlerStateTemplate")
+        local bb = CreateFrame("Frame", "NullgatesActionBars_BagsBar", UIParent, "SecureHandlerStateTemplate")
         bb:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -4, 44)
         BAB:CreateBackdrop(bb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
         self:RegisterMover(bb, "Bags Bar", "BagsBar", "BOTTOMRIGHT", -4, 44)
@@ -1843,7 +1843,7 @@ function Core:CreateBarContainers()
     end
 
     if not bars.totemBar then
-        local tb = CreateFrame("Frame", "BleakfibersActionBars_TotemBar", UIParent, "SecureHandlerStateTemplate")
+        local tb = CreateFrame("Frame", "NullgatesActionBars_TotemBar", UIParent, "SecureHandlerStateTemplate")
         tb:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 280, 70)
         BAB:CreateBackdrop(tb, 0.40, 1.0, C.COLOR_BG, C.COLOR_BORDER)
         self:RegisterMover(tb, "Totem Bar", "TotemBar", "BOTTOMLEFT", 280, 70)
@@ -2056,7 +2056,7 @@ function Core:LayoutExtraBar()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.extraBar or {}
 
     if not cfg.enabled then
@@ -2120,7 +2120,7 @@ function Core:LayoutVehicleLeave()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.vehicleLeave or {}
 
     if not cfg.enabled then
@@ -2183,7 +2183,7 @@ function Core:UpdateAllBars()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     if not db then return end
 
     local gen = db.general or {}
@@ -2389,7 +2389,7 @@ function Core:LayoutMicroBar()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.microBar or {}
     local microMenu = _G.MicroMenu
     local buttons = self:GetActiveMicroButtons()
@@ -2490,7 +2490,7 @@ end
     8b. Dedicated Bags Bar Support
 -------------------------------------------------------------------------------]]
 function Core:GetActiveBagButtons()
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.bagsBar or {}
     local buttons = {}
 
@@ -2580,7 +2580,7 @@ local function QueueBagsBarLayout()
     C_Timer.After(0, function()
         bagLayoutQueued = false
         if not InCombatLockdown() and not isPositioningBags then
-            local db = BleakfibersActionBarsDB
+            local db = NullgatesActionBarsDB
             if db and db.bagsBar and db.bagsBar.enabled ~= false and Core.LayoutBagsBar then
                 Core:LayoutBagsBar()
             end
@@ -2594,7 +2594,7 @@ local function HookBagButtonProtection(btn)
 
     hooksecurefunc(btn, "ClearAllPoints", function(self)
         if isPositioningBags or InCombatLockdown() then return end
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         if db and db.bagsBar and db.bagsBar.enabled ~= false and bars.bagsBar then
             QueueBagsBarLayout()
         end
@@ -2602,7 +2602,7 @@ local function HookBagButtonProtection(btn)
 
     hooksecurefunc(btn, "SetPoint", function(self)
         if isPositioningBags or InCombatLockdown() then return end
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         if db and db.bagsBar and db.bagsBar.enabled ~= false and bars.bagsBar then
             local _, relTo = self:GetPoint()
             if relTo ~= bars.bagsBar then
@@ -2613,7 +2613,7 @@ local function HookBagButtonProtection(btn)
 
     hooksecurefunc(btn, "SetParent", function(self, newParent)
         if isPositioningBags or InCombatLockdown() then return end
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         if db and db.bagsBar and db.bagsBar.enabled ~= false and bars.bagsBar then
             if newParent ~= bars.bagsBar then
                 QueueBagsBarLayout()
@@ -2625,7 +2625,7 @@ end
 function Core:HookBlizzardBagsBar()
     local onLayout = function()
         if not InCombatLockdown() and not isPositioningBags then
-            local db = BleakfibersActionBarsDB
+            local db = NullgatesActionBarsDB
             if db and db.bagsBar and db.bagsBar.enabled ~= false then
                 QueueBagsBarLayout()
             end
@@ -2661,7 +2661,7 @@ function Core:LayoutBagsBar()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.bagsBar or {}
     local bagsBarBlizz = _G.BagsBar
 
@@ -2766,7 +2766,7 @@ function Core:LayoutTotemBar()
         return
     end
 
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local cfg = db and db.totemBar or {}
 
     if not cfg.enabled then
@@ -2842,7 +2842,7 @@ end
     8d. Cast On Key Down Support (ActionButtonUseKeyDown CVar)
 -------------------------------------------------------------------------------]]
 function Core:ApplyCastOnKeyDown()
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local useKeyDown = (db and db.general and db.general.castOnKeyDown ~= false)
     if SetCVar then
         pcall(SetCVar, "ActionButtonUseKeyDown", useKeyDown and "1" or "0")
@@ -2893,7 +2893,7 @@ function Core:HookButtonMouseover(btn, barFrame, barKey)
     btn._buiMouseHooked = true
 
     btn:HookScript("OnEnter", function()
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         local barConfig = db and db[barKey] or {}
         local gen = db and db.general or {}
         if not InCombatLockdown() then
@@ -2904,7 +2904,7 @@ function Core:HookButtonMouseover(btn, barFrame, barKey)
     end)
 
     btn:HookScript("OnLeave", function()
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         local barConfig = db and db[barKey] or {}
         local gen = db and db.general or {}
         if not InCombatLockdown() then
@@ -2921,7 +2921,7 @@ function Core:SetupMouseoverFade(barFrame, barKey)
     if not barFrame then return end
     barFrame:EnableMouse(true)
     barFrame:HookScript("OnEnter", function()
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         local barConfig = db and db[barKey] or {}
         local gen = db and db.general or {}
         if not InCombatLockdown() then
@@ -2932,7 +2932,7 @@ function Core:SetupMouseoverFade(barFrame, barKey)
     end)
 
     barFrame:HookScript("OnLeave", function()
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         local barConfig = db and db[barKey] or {}
         local gen = db and db.general or {}
         if not InCombatLockdown() then
@@ -2946,7 +2946,7 @@ function Core:SetupMouseoverFade(barFrame, barKey)
 end
 
 function Core:ApplyCombatAlpha()
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     if not db then return end
     local gen = db.general or {}
     local inCombat = InCombatLockdown()
@@ -2968,7 +2968,7 @@ end
     10. Range & Usability Indicators
 -------------------------------------------------------------------------------]]
 local function UpdateButtonColor(btn, checksRange, inRange)
-    local db = BleakfibersActionBarsDB
+    local db = NullgatesActionBarsDB
     local gen = db and db.general or {}
     if not btn or not btn.icon then return end
 
@@ -3119,7 +3119,7 @@ Core:SetScript("OnEvent", function(self, event, ...)
         self:HookOverlayGlow()
         self:ApplyCastOnKeyDown()
 
-        local gen = BleakfibersActionBarsDB and BleakfibersActionBarsDB.general
+        local gen = NullgatesActionBarsDB and NullgatesActionBarsDB.general
         if gen and gen.lockPositions ~= nil then
             SetCVar("lockActionBars", gen.lockPositions and "1" or "0")
         end
@@ -3202,7 +3202,7 @@ Core:SetScript("OnEvent", function(self, event, ...)
                     end
                 end
                 if parent then
-                    local db = BleakfibersActionBarsDB
+                    local db = NullgatesActionBarsDB
                     local g = db and db.general or {}
                     local bKey = parent._barKey
                     local dir = parent.flyoutDirection or (bKey and db and db[bKey] and db[bKey].flyoutDirection) or (g and g.flyoutDirection) or "UP"
@@ -3234,7 +3234,7 @@ Core:SetScript("OnEvent", function(self, event, ...)
             end
         end
     elseif event == "ACTIONBAR_HIDEGRID" then
-        local db = BleakfibersActionBarsDB
+        local db = NullgatesActionBarsDB
         for barIdx = 1, 15 do
             local key = "bar" .. barIdx
             local barConfig = db and db[key] or {}
@@ -3269,7 +3269,7 @@ Core:SetScript("OnEvent", function(self, event, ...)
         for i = 1, 10 do
             local btn = _G["PetActionButton" .. i]
             if btn then
-                self:UpdateButtonVisuals(btn, BleakfibersActionBarsDB and BleakfibersActionBarsDB.petBar)
+                self:UpdateButtonVisuals(btn, NullgatesActionBarsDB and NullgatesActionBarsDB.petBar)
             end
         end
     elseif event == "PLAYER_TOTEM_UPDATE" then
@@ -3286,3 +3286,36 @@ Core:SetScript("OnEvent", function(self, event, ...)
     end
 end)
 
+-- ---------------------------------------------------------------------------
+-- Pre-rebrand version still installed (e.g. a copied Interface folder) would run twice
+-- ---------------------------------------------------------------------------
+do
+    local OLD_ADDON = "BleakfibersActionBars-Forever"
+    local IsAddOnLoaded = (C_AddOns and C_AddOns.IsAddOnLoaded) or IsAddOnLoaded
+    local DisableAddOn = (C_AddOns and C_AddOns.DisableAddOn) or DisableAddOn
+
+    StaticPopupDialogs["NULLGATES_ACTIONBARS_OLD_ADDON"] = {
+        text = "Bleakfiber's Action Bars is now Nullgate's Action Bars, and the old version is still installed. Running both loads it twice. Disable the old one now, then delete the BleakfibersActionBars-Forever folder from Interface\\AddOns.",
+        button1 = "Disable and Reload",
+        button2 = CANCEL,
+        OnAccept = function()
+            DisableAddOn(OLD_ADDON)
+            ReloadUI()
+        end,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+        preferredIndex = 3,
+    }
+
+    local guard = CreateFrame("Frame")
+    guard:RegisterEvent("PLAYER_LOGIN")
+    guard:SetScript("OnEvent", function(self)
+        self:UnregisterAllEvents()
+        C_Timer.After(4, function()
+            if IsAddOnLoaded and IsAddOnLoaded(OLD_ADDON) then
+                StaticPopup_Show("NULLGATES_ACTIONBARS_OLD_ADDON")
+            end
+        end)
+    end)
+end

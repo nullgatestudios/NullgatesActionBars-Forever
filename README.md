@@ -1,14 +1,14 @@
-# Bleakfiber's Action Bars - Forever
+# Nullgate's Action Bars - Forever
 
-[![Interface](https://img.shields.io/badge/Interface-16001%20(WoW%20Forever)-0078D7.svg?style=flat-square)](https://github.com/Bleakfiber/BleakfibersActionBars-Forever)
-[![Release](https://img.shields.io/badge/Release-v1.1.4-ffd100.svg?style=flat-square)](https://github.com/Bleakfiber/BleakfibersActionBars-Forever/releases)
+[![Interface](https://img.shields.io/badge/Interface-16001%20(WoW%20Forever)-0078D7.svg?style=flat-square)](https://github.com/nullgatestudios/NullgatesActionBars-Forever)
+[![Release](https://img.shields.io/badge/Release-v1.1.4-ffd100.svg?style=flat-square)](https://github.com/nullgatestudios/NullgatesActionBars-Forever/releases)
 [![License](https://img.shields.io/badge/License-Source--Available-crimson.svg?style=flat-square)](LICENSE.md)
-[![Dependencies](https://img.shields.io/badge/Dependencies-Zero%20External-2ea44f.svg?style=flat-square)](https://github.com/Bleakfiber/BleakfibersActionBars-Forever)
-[![Suite](https://img.shields.io/badge/Suite-Bleakfiber's%20Addon%20Suite-8a2be2.svg?style=flat-square)](https://github.com/Bleakfiber)
+[![Dependencies](https://img.shields.io/badge/Dependencies-Zero%20External-2ea44f.svg?style=flat-square)](https://github.com/nullgatestudios/NullgatesActionBars-Forever)
+[![Suite](https://img.shields.io/badge/Suite-Nullgate's%20Addon%20Suite-8a2be2.svg?style=flat-square)](https://github.com/nullgatestudios)
 
-**Bleakfiber's Action Bars** is a modular, high-performance, standalone action bar suite crafted specifically for **World of Warcraft: Forever** (Interface 16001).
+**Nullgate's Action Bars** is a modular, high-performance, standalone action bar suite crafted specifically for **World of Warcraft: Forever** (Interface 16001).
 
-Engineered from the ground up as a lightweight, pixel-perfect replacement for the default Blizzard action bar system, it delivers bespoke **Dark Slate & Gold** visual styling alongside advanced combat features: 10 independent movable action bars, a dedicated skinnable Bags and Keyring container, Shaman Totem and Paladin Aura/Stance bars, instant Cast on Key Down activation, cooldown pulse animations, shiny golden proc activation glows, an integrated hover keybinder, and seamless synchronization with the **Bleakfiber Addon Suite**.
+Engineered from the ground up as a lightweight, pixel-perfect replacement for the default Blizzard action bar system, it delivers bespoke **Dark Slate & Gold** visual styling alongside advanced combat features: 10 independent movable action bars, a dedicated skinnable Bags and Keyring container, Shaman Totem and Paladin Aura/Stance bars, instant Cast on Key Down activation, cooldown pulse animations, shiny golden proc activation glows, an integrated hover keybinder, and seamless synchronization with the **Nullgate Addon Suite**.
 
 Runs **100% standalone out of the box** with zero required third-party libraries or addons.
 
@@ -30,7 +30,7 @@ Runs **100% standalone out of the box** with zero required third-party libraries
 - [Slash Commands Reference](#-slash-commands-reference)
 - [Architecture & File Overview](#-architecture--file-overview)
 - [Installation Guide](#-installation-guide)
-- [Bleakfiber Addon Suite Ecosystem](#-bleakfiber-addon-suite-ecosystem)
+- [Nullgate Addon Suite Ecosystem](#-nullgate-addon-suite-ecosystem)
 - [License & Support](#-license--support)
 
 ---
@@ -45,7 +45,7 @@ Runs **100% standalone out of the box** with zero required third-party libraries
 * **Spell Activation Proc Glows**: Golden proc overlay borders that illuminate when reactive abilities (Overpower, Revenge, Execute, etc.) become usable.
 * **Cast on Key Down**: Instant spell activation on button press (`ActionButtonUseKeyDown`) rather than button release for maximum responsiveness.
 * **Visual Hover Keybinder**: Quickly assign or unassign keybindings by hovering over any action button and pressing your desired key combination.
-* **Non-Destructive Profile Capture**: Instant profile synchronization with `BleakfibersAddonConfig-Forever` that captures active settings upon creating a new profile instead of resetting to defaults.
+* **Non-Destructive Profile Capture**: Instant profile synchronization with `NullgatesAddonConfig-Forever` that captures active settings upon creating a new profile instead of resetting to defaults.
 
 ---
 
@@ -82,13 +82,13 @@ Eliminate click-release latency:
 
 ### 6. Visual Hover Keybinder
 Effortlessly configure keybindings on the fly:
-- Enter Keybind Mode with `/bfb bind` or `/kb`.
+- Enter Keybind Mode with `/nbags bind` or `/kb`.
 - Hover over any button, press any key or combination (`Shift+Q`, `Ctrl+1`, `Mouse4`), and the binding is instantly saved.
 - Hover and press `Escape` to unbind.
 
 ### 7. Master Mover Mode & Profile Sync
-Full integration into the Bleakfiber suite:
-- **Global Mover Coordination**: Integrated with `BleakfibersAddonConfig-Forever`. When BAC is installed, ActionBars automatically defers to the global `/bac mover` mode.
+Full integration into the Nullgate suite:
+- **Global Mover Coordination**: Integrated with `NullgatesAddonConfig-Forever`. When BAC is installed, ActionBars automatically defers to the global `/nac mover` mode.
 - **Non-Destructive Profiles**: New profiles capture current active configurations rather than resetting bars to factory defaults.
 
 ---
@@ -97,18 +97,18 @@ Full integration into the Bleakfiber suite:
 
 | Action | Description |
 | :--- | :--- |
-| **`/bfb` or `/bar`** | Opens the ActionBars graphical configuration options panel. |
-| **`/bfb mover`** | Toggles mover overlays to drag and reposition all 10 action bars. |
-| **`/bfb bind` or `/kb`** | Enters interactive hover-to-bind keybinding mode. |
+| **`/nbags` or `/bar`** | Opens the ActionBars graphical configuration options panel. |
+| **`/nbags mover`** | Toggles mover overlays to drag and reposition all 10 action bars. |
+| **`/nbags bind` or `/kb`** | Enters interactive hover-to-bind keybinding mode. |
 | **Hover + Key in Bind Mode** | Binds the hovered action button to the pressed key combination. |
 | **Hover + Escape in Bind Mode** | Unbinds any existing keybind on the hovered button. |
-| **`/bfb reset`** | Resets all action bar positions back to default layout. |
+| **`/nbags reset`** | Resets all action bar positions back to default layout. |
 
 ---
 
 ## 🛠️ Configuration Guide
 
-Access settings via `/bfb`, `/bar`, `/actionbars`, or through the master hub in `/bac`:
+Access settings via `/nbags`, `/bar`, `/actionbars`, or through the master hub in `/nac`:
 
 1. **General Settings**: Master addon toggle, Cast on Key Down activation, cooldown pulse toggle, proc glow toggle, button grid visibility, and button styling.
 2. **Bar Configurations (Bars 1–5)**: Independent toggles, number of buttons (1–12), column layout, icon scaling (50%–200%), padding, and visibility conditions.
@@ -124,20 +124,20 @@ Access settings via `/bfb`, `/bar`, `/actionbars`, or through the master hub in 
 
 | Command | Description |
 | :--- | :--- |
-| `/bfb` | Opens the graphical configuration panel. |
+| `/nbags` | Opens the graphical configuration panel. |
 | `/bar` or `/actionbars` | Alternative shortcuts to open the configuration panel. |
-| `/bfb mover` | Toggles on-screen mover frames for all action bars. |
-| `/bfb bind` or `/kb` | Toggles visual hover keybinding mode. |
-| `/bfb reset` | Resets all bar positions back to factory defaults. |
-| `/bfb profile <name>` | Switches active profile or prints current profile name. |
+| `/nbags mover` | Toggles on-screen mover frames for all action bars. |
+| `/nbags bind` or `/kb` | Toggles visual hover keybinding mode. |
+| `/nbags reset` | Resets all bar positions back to factory defaults. |
+| `/nbags profile <name>` | Switches active profile or prints current profile name. |
 
 ---
 
 ## 🏗️ Architecture & File Overview
 
 ```
-BleakfibersActionBars-Forever/
-├── BleakfibersActionBars-Forever.toc  # Addon metadata, SavedVariables & dependencies
+NullgatesActionBars-Forever/
+├── NullgatesActionBars-Forever.toc  # Addon metadata, SavedVariables & dependencies
 ├── Config.lua                         # AceDB configuration schema, defaults & BAC registry
 ├── Core.lua                           # Bar lifecycle, secure action buttons, movers, events & logic
 ├── UI.lua                             # Configuration GUI panels & options tables
@@ -151,30 +151,30 @@ BleakfibersActionBars-Forever/
 
 ## 💾 Installation Guide
 
-1. Download the latest release package from the official [Releases](https://github.com/Bleakfiber/BleakfibersActionBars-Forever/releases) page.
+1. Download the latest release package from the official [Releases](https://github.com/nullgatestudios/NullgatesActionBars-Forever/releases) page.
 2. Exit World of Warcraft completely.
-3. Extract the downloaded archive (`BleakfibersActionBars-Forever 1.1.4.zip`).
-4. Copy the `BleakfibersActionBars-Forever` folder into your WoW client AddOns directory:
+3. Extract the downloaded archive (`NullgatesActionBars-Forever 1.1.4.zip`).
+4. Copy the `NullgatesActionBars-Forever` folder into your WoW client AddOns directory:
    ```
-   World of Warcraft/_forever_/Interface/AddOns/BleakfibersActionBars-Forever
+   World of Warcraft/_forever_/Interface/AddOns/NullgatesActionBars-Forever
    ```
-5. Launch World of Warcraft, log into your character, and type `/bfb` to configure your bars.
+5. Launch World of Warcraft, log into your character, and type `/nbags` to configure your bars.
 
 ---
 
-## 🌌 Bleakfiber Addon Suite Ecosystem
+## 🌌 Nullgate Addon Suite Ecosystem
 
-Bleakfiber's Action Bars integrates seamlessly with the entire **Bleakfiber Addon Suite**:
+Nullgate's Action Bars integrates seamlessly with the entire **Nullgate Addon Suite**:
 
-* **[Bleakfiber's Addon Config](https://github.com/Bleakfiber/BleakfibersAddonConfig-Forever)**: Centralized master configuration hub with unified mover mode and cross-addon profile syncing.
-* **[Bleakfiber's Quest Tracker](https://github.com/Bleakfiber/BleakfibersQuestTracker-Forever)**: High-performance quest tracker with 360° Wayfinder navigation and interactive quest item buttons.
-* **[Bleakfiber's Maps](https://github.com/Bleakfiber/BleakfibersMaps-Forever)**: Lightweight world map and minimap customization suite.
-* **[Bleakfiber's Unit Toggles](https://github.com/Bleakfiber/BleakfibersUnitToggles-Forever)**: Instant Blizzard unit name & nameplate toggle suite with 20 CVar presets.
+* **[Nullgate's Addon Config](https://github.com/nullgatestudios/NullgatesAddonConfig-Forever)**: Centralized master configuration hub with unified mover mode and cross-addon profile syncing.
+* **[Nullgate's Quest Tracker](https://github.com/nullgatestudios/NullgatesQuestTracker-Forever)**: High-performance quest tracker with 360° Wayfinder navigation and interactive quest item buttons.
+* **[Nullgate's Maps](https://github.com/nullgatestudios/NullgatesMaps-Forever)**: Lightweight world map and minimap customization suite.
+* **[Nullgate's Unit Toggles](https://github.com/nullgatestudios/NullgatesUnitToggles-Forever)**: Instant Blizzard unit name & nameplate toggle suite with 20 CVar presets.
 
 ---
 
 ## 📜 License & Support
 
 * **License**: Restricted - Source-Available (All Rights Reserved, No Derivatives). See [LICENSE.md](LICENSE.md) for full terms.
-* **Issues & Feedback**: Encounter a bug or have a feature request? Open an issue on our [GitHub Issue Tracker](https://github.com/Bleakfiber/BleakfibersActionBars-Forever/issues).
-* **Author**: Bleakfiber
+* **Issues & Feedback**: Encounter a bug or have a feature request? Open an issue on our [GitHub Issue Tracker](https://github.com/nullgatestudios/NullgatesActionBars-Forever/issues).
+* **Author**: Nullgate

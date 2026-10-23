@@ -1,25 +1,25 @@
 --[[
-    Bleakfiber's Action Bars - UI.lua
+    Nullgate's Action Bars - UI.lua
     Presentation Layer: Dark Slate & Gold Theme, Widget Factory,
     Modular Tabbed Options Panel & Standalone Fallback Window
 ]]
 
 local addonName, BAB = ...
 
-local ADDON_NAME = "BleakfibersActionBars"
-local FULL_TITLE = "Bleakfiber's Action Bars"
+local ADDON_NAME = "NullgatesActionBars"
+local FULL_TITLE = "Nullgate's Action Bars"
 
 local UI = {}
 BAB.UI = UI
-_G["BleakfibersActionBarsUI"] = UI
+_G["NullgatesActionBarsUI"] = UI
 
 local Config = setmetatable({}, {
     __index = function(_, k)
-        local c = BAB.Config or _G["BleakfibersActionBarsConfig"]
+        local c = BAB.Config or _G["NullgatesActionBarsConfig"]
         if c then return c[k] end
     end,
     __newindex = function(_, k, v)
-        local c = BAB.Config or _G["BleakfibersActionBarsConfig"]
+        local c = BAB.Config or _G["NullgatesActionBarsConfig"]
         if c then c[k] = v end
     end,
 })
@@ -686,7 +686,7 @@ end
 function UI:BuildOptions(parentContainer, isMasterHub)
     isMasterHub = isMasterHub or (parentContainer and parentContainer.isMasterHub) or false
 
-    local realConfig = BAB.Config or _G["BleakfibersActionBarsConfig"]
+    local realConfig = BAB.Config or _G["NullgatesActionBarsConfig"]
     if realConfig and realConfig.InitDB then
         realConfig:InitDB()
     end
@@ -755,7 +755,7 @@ function UI:BuildOptions(parentContainer, isMasterHub)
     tabContent:SetBackdropBorderColor(unpack(COLORS.goldMuted))
 
     -- ScrollFrame for Tab Content
-    local scrollFrame = CreateFrame("ScrollFrame", "BleakActionBarsOptionsScrollFrame", tabContent, "UIPanelScrollFrameTemplate")
+    local scrollFrame = CreateFrame("ScrollFrame", "NullgateActionBarsOptionsScrollFrame", tabContent, "UIPanelScrollFrameTemplate")
     scrollFrame:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 8, -8)
     scrollFrame:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -26, 8)
 
